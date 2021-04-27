@@ -9,29 +9,12 @@ namespace AgilityCIS.Data.CSVExtractor
     {
         XmlDocument _xmlDocument;
         public string SourceFile { get; set; }
-        public string OutputDirectory
-        {
-            get
-            {
-                return OutputDirectory;
-            }
-            set
-            {
-                if (!Directory.Exists(value))
-                    Directory.CreateDirectory(value);
-            }
-        }
+        public string OutputDirectory { get; set; }
+
         public IntervalDataExtractor(string sourceFile, string outputDirectory)
         {
             SourceFile = sourceFile;
             OutputDirectory = outputDirectory;
-
-            //Creates output directory, if it does not exist
-            if (!Directory.Exists(OutputDirectory))
-            {
-                Directory.CreateDirectory(OutputDirectory);
-            }
-
             _xmlDocument = new XmlDocument();
         }
 
@@ -40,6 +23,13 @@ namespace AgilityCIS.Data.CSVExtractor
             try
             {
                 _xmlDocument.Load(SourceFile);
+                
+                //Creates output directory, if it does not exist
+                if (!Directory.Exists(OutputDirectory))
+                {
+                    Directory.CreateDirectory(OutputDirectory);
+                }
+                
                 XmlNode transactions = _xmlDocument.DocumentElement.FirstChild.NextSibling;
                 int i = 0;
                 foreach (XmlNode t in transactions)
